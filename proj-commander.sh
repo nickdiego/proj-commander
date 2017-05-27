@@ -315,8 +315,8 @@ __projectopts() {
 ## Init stuff
 _cmdproj_options=( '-v' )
 
-if [ -d ~/.projects-env.d ]; then
-    for script in ~/.projects-env.d/*.sh; do
+if [ -d ~/.projects.d ]; then
+    for script in ~/.projects.d/*.sh; do
         config_proj $script
     done
     unset script
