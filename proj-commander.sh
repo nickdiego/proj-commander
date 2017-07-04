@@ -316,7 +316,7 @@ __projectopts() {
 _cmdproj_options=( '-v' )
 
 if [ -d ~/.projects.d ]; then
-    for script in ~/.projects.d/*.sh; do
+    for script in ~/.projects.d/*.sh ~/.projects.d/**/*.sh; do
         config_proj $script
     done
     unset script
