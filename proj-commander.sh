@@ -73,10 +73,6 @@ config_proj() {
         clear_subproj_env
     }
 
-    function generate_var_prefix() {
-        sed 's/[^a-zA-Z0-9]/_/g' <<< $1
-    }
-
     function generate_full_var_prefix() {
         local proj=$(generate_var_prefix $1)
         local sub=$(generate_var_prefix $2)
@@ -93,15 +89,8 @@ config_proj() {
         unset -f setenv activate
     }
 
-    function clear_subproj_env() {
-        unset -v dirs defaultdir target options vimsession
-    }
-
-    function declared_func() {
-        declare -f "$1" >/dev/null
-    }
-
     local script=$1
+    clear_proj_env
     source $script
     if [[ -z $projname ]]; then
         log_message "Error: Couldn't find \$projname for $script"
@@ -111,8 +100,19 @@ config_proj() {
         test -d $projrootpath || return 1
         log_message "Setting env for $projrootpath"
         generate_proj_env $projname $projrootpath
-        clear_proj_env
     fi
+}
+
+clear_subproj_env() {
+    unset -v dirs defaultdir target options vimsession
+}
+
+generate_var_prefix() {
+    sed 's/[^a-zA-Z0-9]/_/g' <<< $1
+}
+
+declared_func() {
+    declare -f "$1" >/dev/null
 }
 
 # Internal helper functions
