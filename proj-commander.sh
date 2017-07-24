@@ -81,7 +81,7 @@ config_proj() {
 
     function generate_projid() {
         local proj=$1 sub=$2 sep=$3
-        [ "$proj" = "$sub" ] && echo "${proj}" || echo "${proj}/${sub}"
+        [ "$proj" = "$sub" ] && echo "${proj}/" || echo "${proj}/${sub}"
     }
 
     function clear_proj_env() {
@@ -183,7 +183,7 @@ proj_set() {
     local projid=${_val[0]#@}
     if [[ -z "${projid:-}" ]]; then
         if [[ -z "${curr_project:-}" ]]; then
-            echo "Failed to switch do project dir: \$curr_project empty."
+            echo "Failed to switch to project dir: \$curr_project empty."
             return 1
         fi
         projid="$curr_project"
@@ -235,9 +235,11 @@ proj_set() {
 proj_cd() {
     eval $(process_args $@)
     local projid=${_val[0]:-$curr_project}
+    projid=${projid%/}
     proj_set $projid ${!_opt[@]}
     local basedir="$curr_proj_defaultdir"
     [[ -n $basedir ]] || basedir=${curr_proj_src_dir:-$curr_proj_root_dir}
+    echo cd "${basedir}/${_val[1]}" >>/tmp/xx.log
     cd "${basedir}/${_val[1]}"
 }
 
@@ -285,6 +287,7 @@ __projectopts() {
                 ;;
             @*)
                 arg=${arg#@}
+                arg=${arg%/}
                 if [[ -z "$arg" ]]; then
                     [[ -z $curr_project ]] && return 1 ||
                         proj=$(generate_var_prefix $curr_project)
