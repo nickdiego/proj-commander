@@ -206,7 +206,12 @@ proj_set() {
     fi
 
     clear_curr_proj_vars
-    declared_func $activatefunc && $activatefunc $subproj
+    if ! declared_func $activatefunc; then
+        echo "Failed to switch project dir: projid '$projid' not found!"
+        return 1
+    fi
+
+    $activatefunc $subproj
 
     # FIXME: Re-generate proj env, they may change
     # dependingo on the options are passed to
@@ -230,16 +235,16 @@ proj_set() {
 
     log_message "Switched ${_opt['--back']:+back }to project '${projid}'" \
         " (Back stack: [ $(sed 's/ / > /g' <<< "${_prev_project[@]}") ])"
+    return 0
 }
 
 proj_cd() {
     eval $(process_args $@)
     local projid=${_val[0]:-$curr_project}
     projid=${projid%/}
-    proj_set $projid ${!_opt[@]}
+    proj_set $projid ${!_opt[@]} || return 1
     local basedir="$curr_proj_defaultdir"
     [[ -n $basedir ]] || basedir=${curr_proj_src_dir:-$curr_proj_root_dir}
-    echo cd "${basedir}/${_val[1]}" >>/tmp/xx.log
     cd "${basedir}/${_val[1]}"
 }
 
