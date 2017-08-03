@@ -13,16 +13,16 @@ of each project (e.g: sourcing some project's env script, start some background 
 tool, python for example, etc), everything in a organized way, keeping each project-specific config in a separate file and activating/loading
 them only when necessary.
 
-*In some aspects, `proj-commander` is inspired in Arch Linux's packaging/building system, where the package are built following
+*In some aspects, `proj-commander` is inspired by Arch Linux's packaging/building system, where the package are built following
 the steps described in PKGBUILD files, the are simple and clean bash scripts the set some vars and implement some functions defined
 by the packaging system.*
 
 ## Installation
 
-Running on a Linux/Unix machine\*, run on some bash\*\* instance: 
+Running on a Linux/Unix machine\*, run on some bash\*\* instance:
 *\* tested only in recent versions of Arch Linux<br/>
 \*\* tested only in 4.0+ versions of Bash, so far*
-```
+```bash
 $ curl https://raw.githubusercontent.com/nickdiego/proj-commander/master/proj-commander.sh > ~/.proj-commander &&
 $ echo '[ -r ~/.proj-commander ] && source ~/.proj-commander' >> ~/.bashrc &&
 $ exec /bin/bash -l
@@ -33,7 +33,7 @@ $ exec /bin/bash -l
 After installing, you need to create the configuration files for your projects in `~/.projects.d` directory. For example, you may
 have a conf file the Qt5 project as follows:
 
-```
+```bash
 projname=qt5
 projpath=~/myprojects/qt5
 subprojects=(base webengine)
@@ -53,8 +53,8 @@ activate() {
 ## Usage
 After reloading bash, you can finally use the `proj-commander` commands `pset` and `pcd` to activate and navigate to
 qt project, for example:
-```
-$ pset @qt5      <-- set qt5 as the current project and `activate` it (that will source its `env.sh` script 
+```bash
+$ pset @qt5      <-- set qt5 as the current project and `activate` it (that will source its `env.sh` script
 
 $ pcd            <-- change current directory to qt5's root dir
 
